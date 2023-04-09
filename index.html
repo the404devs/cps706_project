@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CPS706 Project</title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="graphGenBox">
+        <!-- <div class="graphEntry">
+            <label for="nodeName">Node:</label>
+            <input type="text" id="nodeName" name="nodeName">
+            <br>
+            <label for="neighbourSelect">Neighbours:</label>
+            <div class="checkboxContainer" name="neighbourSelect">
+                <input type="checkbox">
+            </div>
+        </div> -->
+        <button onclick="addNode()">Add Node</button>
+        <button onclick="generateGraph()">Generate Graph!</button>
+    </div>
+    <div id="canvasBox">
+        <canvas id="canvas"></canvas>
+        <table id="t1">
+            <p>Dijkstra</p>
+        </table>
+        <table id="t2">
+            <p>Bellman-Ford</p>
+        </table>
+    </div>
+    <script type="text/javascript" src="./graph.js"></script>
+    <script type="text/javascript" src="./canvas.js"></script>
+    <script type="text/javascript" src="./algo.js"></script>
+</body>
+
+</html>

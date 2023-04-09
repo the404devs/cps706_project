@@ -1,0 +1,36 @@
+#graphGenBox,
+#canvasBox {
+    border: 2px solid black;
+    width: 45%;
+    padding: 10px;
+}
+
+#graphGenBox {
+    float: left;
+}
+
+#canvasBox {
+    float: right;
+}
+
+.node {
+    border: 1px solid black;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+td,
+th,
+table {
+    border: 1px solid black;
+}
+
+table {
+    width: 30%;
+    display: inline-block;
+    text-align: center;
+}
+
+input {
+    width: 30px;
+}

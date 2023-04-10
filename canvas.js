@@ -2,6 +2,8 @@ function drawGraphOnCanvas(graph) {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
+    const startNode = $("#startingNode").val();
+
     // const graph = {
     //   A: { B: 1, C: 2 },
     //   B: { D: 3 },
@@ -19,11 +21,15 @@ function drawGraphOnCanvas(graph) {
 
     // Set the node size and colour
     const nodeSize = 30;
+    const nodeRadius = nodeSize / 2;
     const nodeColor = '#2ecc71';
+    const nodeColorAlt = '#f00';
 
     // Set the line colour and width
     const lineColor = '#34495e';
     const lineWidth = 2;
+
+
 
     // Set the text colour 
     const textColor = '#000000'
@@ -61,12 +67,27 @@ function drawGraphOnCanvas(graph) {
             const connectedX = positions[connectedNode].X;
             const connectedY = positions[connectedNode].Y;
 
+            // Calculate the angle of the line
+            const angle = Math.atan2(connectedY - y, connectedX - x);
+
+            const lineStartX = x - nodeRadius * Math.cos(angle);
+            const lineStartY = y - nodeRadius * Math.sin(angle);
+            const lineEndX = connectedX - nodeRadius * Math.cos(angle);
+            const lineEndY = connectedY - nodeRadius * Math.sin(angle);
+
+
+            // Define the control point for the curve
+            const curveDepth = 50;
+            const curveX = (x + connectedX) / 2 + curveDepth * Math.sin(angle);
+            const curveY = (y + connectedY) / 2 - curveDepth * Math.cos(angle);
+
+
             // Draw the line
             ctx.strokeStyle = lineColor;
             ctx.lineWidth = lineWidth;
             ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(connectedX, connectedY);
+            ctx.moveTo(lineStartX, lineStartY);
+            ctx.quadraticCurveTo(curveX, curveY, lineEndX, lineEndY);
             ctx.stroke();
 
             // Calculate the distance between the nodes
@@ -76,15 +97,36 @@ function drawGraphOnCanvas(graph) {
             ctx.fillStyle = textColor;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
-            ctx.fillText(distance, (x + connectedX) / 2, (y + connectedY) / 2);
+            ctx.fillText(distance, curveX, curveY);
+
+            // Draw the arrowhead
+            const arrowAngle = Math.atan2(curveY, curveX);
+            const arrowSize = 15;
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(lineEndX, lineEndY);
+            ctx.rotate(angle + arrowAngle / 2 + Math.PI);
+            ctx.moveTo(0, 0);
+            ctx.lineTo(arrowSize, -arrowSize / 2);
+            ctx.lineTo(arrowSize, arrowSize / 2);
+            ctx.closePath();
+            ctx.restore();
+            ctx.fillStyle = lineColor;
+            ctx.fill();
         }
 
         // Draw the node
         // We do this after drawing connecting lines, 
         // otherwise they will be shown on top of the node label.
-        ctx.fillStyle = nodeColor;
+        // Nodes are green, starting node is red.
+        if (node == startNode) {
+            ctx.fillStyle = nodeColorAlt;
+        } else {
+            ctx.fillStyle = nodeColor;
+        }
+
         ctx.beginPath();
-        ctx.arc(x, y, nodeSize / 2, 0, Math.PI * 2);
+        ctx.arc(x, y, nodeRadius, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw the node label
@@ -93,5 +135,4 @@ function drawGraphOnCanvas(graph) {
         ctx.textBaseline = 'middle';
         ctx.fillText(node, x, y);
     }
-
 }

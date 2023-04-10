@@ -12,7 +12,7 @@ function addNode() {
         ).append(
             $("<br>")
         ).append(
-            $("<label>").attr("for", "neighbourSelect").text("Neighbours:")
+            $("<label>").attr("for", "neighbourSelect").text("Connecting Edges:")
         ).append(
             $("<div>").addClass("neighbours").attr("name", "neighbourSelect")
         )
@@ -44,34 +44,41 @@ function populateNeighbours() {
 }
 
 function generateGraph() {
-    let graph = {}; // To hold the graph
 
-    // Iterate over each node...
-    $(".node").each(function() {
-        // Add it to the graph
-        const key = charify(parseInt($(this).attr("id")));
-        // console.log("found node: " + key);
-        graph[key] = {};
+    const startNode = $("#startingNode").val();
 
-        // Find all of its connecting non-zero edges and add them to the graph
-        $(this).find(".edge").each(function() {
-            const subkey = charify(parseInt($(this).attr("id")));
-            const dist = parseInt($(this).val());
-            if (dist > 0) {
-                graph[key][subkey] = dist;
-            }
+    if (startNode) {
+        let graph = {}; // To hold the graph
+
+        // Iterate over each node...
+        $(".node").each(function() {
+            // Add it to the graph
+            const key = charify(parseInt($(this).attr("id")));
+            // console.log("found node: " + key);
+            graph[key] = {};
+
+            // Find all of its connecting non-zero edges and add them to the graph
+            $(this).find(".edge").each(function() {
+                const subkey = charify(parseInt($(this).attr("id")));
+                const dist = parseInt($(this).val());
+                if (dist > 0) {
+                    graph[key][subkey] = dist;
+                }
+            });
+
         });
 
-    });
+        console.log(graph);
+        globalGraph = graph;
 
-    console.log(graph);
-    globalGraph = graph;
-
-    // Draw the graph on the canvas
-    drawGraphOnCanvas(globalGraph);
-    // Compute the cost to reach all nodes with both algorithms
-    displayCostInTable(dijkstra(globalGraph, "A"), "t1");
-    displayCostInTable(bellmanFord(globalGraph, "A"), "t2");
+        // Draw the graph on the canvas
+        drawGraphOnCanvas(globalGraph);
+        // Compute the cost to reach all nodes with both algorithms
+        displayCostInTable(dijkstra(globalGraph, startNode), "t1");
+        displayCostInTable(bellmanFord(globalGraph, startNode), "t2");
+    } else {
+        alert("Please enter starting node.");
+    }
 }
 
 function displayCostInTable(obj, tid) {
@@ -106,3 +113,5 @@ function charify(n) {
 
 // Initial node.
 addNode();
+
+$("#startingNode").val("A");

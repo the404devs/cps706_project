@@ -4,11 +4,12 @@ let globalGraph = {};
 
 // Adds a new node input to the page.
 function addNode() {
+    const nodeName = charify(globalCounter);
     $("#graphGenBox").append(
         $("<div>").addClass("node").attr("id", globalCounter).append(
             $("<label>").attr("for", "nodeName").text("Node: ")
         ).append(
-            $("<input>").attr("type", "text").attr("id", "nodeName").attr("name", "nodeName").attr("readonly", "readonly").val(charify(globalCounter))
+            $("<input>").attr("type", "text").attr("id", "nodeName").attr("name", "nodeName").attr("readonly", "readonly").val(nodeName)
         ).append(
             $("<br>")
         ).append(
@@ -16,6 +17,11 @@ function addNode() {
         ).append(
             $("<div>").addClass("neighbours").attr("name", "neighbourSelect")
         )
+    );
+
+    // Add the new node as an option for the starting node selection
+    $("#startingNode").append(
+        $("<option>").attr("val", nodeName).text(nodeName)
     );
 
     // Need to add a new input in the neighbours section for each node

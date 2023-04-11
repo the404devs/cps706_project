@@ -13,8 +13,8 @@ function drawGraphOnCanvas(graph) {
     // };
 
     // Set the size of the canvas
-    canvas.width = 400;
-    canvas.height = 400;
+    canvas.width = 500;
+    canvas.height = 500;
 
     // Set the font style and size
     ctx.font = 'bold 16px Arial';
@@ -44,10 +44,10 @@ function drawGraphOnCanvas(graph) {
         const y = (canvas.height / 2) + Math.sin(angle) * (canvas.height / 2);
 
         // Checks to make sure the nodes aren't cut off at the edge of the canvas
-        const leftBoundary = nodeSize;
-        const rightBoundary = canvas.width - nodeSize;
-        const topBoundary = nodeSize;
-        const bottomBoundary = canvas.height - nodeSize;
+        const leftBoundary = nodeSize * 2;
+        const rightBoundary = canvas.width - nodeSize * 2;
+        const topBoundary = nodeSize * 2;
+        const bottomBoundary = canvas.height - nodeSize * 2;
         const adjustedX = Math.max(leftBoundary, Math.min(rightBoundary, x));
         const adjustedY = Math.max(topBoundary, Math.min(bottomBoundary, y));
         positions[node] = { X: adjustedX, Y: adjustedY };
@@ -97,7 +97,7 @@ function drawGraphOnCanvas(graph) {
             ctx.fillStyle = textColor;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
-            ctx.fillText(distance, curveX, curveY);
+            ctx.fillText(distance, curveX / 2, curveY / 2);
 
             // Draw the arrowhead
             const arrowAngle = Math.atan2(curveY, curveX);
